@@ -5,9 +5,8 @@ Give it a LinkedIn profile URL, get back structured JSON.
 **Live:** <https://tross-h4pk.onrender.com> · [**Interactive docs**](https://tross-h4pk.onrender.com/docs) · [**Health**](https://tross-h4pk.onrender.com/api/v1/health)
 
 ```bash
-curl -H "X-API-Key: $API_KEY" \
-  --get "https://tross-h4pk.onrender.com/api/v1/profile" \
-  --data-urlencode "url=https://www.linkedin.com/in/williamhgates/"
+curl --get "https://tross-h4pk.onrender.com/api/v1/profile" \
+  --data-urlencode "url=https://www.linkedin.com/in/priyanshu-saxena07/"
 ```
 
 `--data-urlencode` matters: a raw `https://` inside a query string trips some
@@ -39,12 +38,6 @@ pip install -r requirements-dev.txt
 cp .env.example .env
 ```
 
-Set an API key of your choosing in `.env` (callers must send it):
-
-```ini
-API_KEYS=pick-any-secret-string
-```
-
 Mint a LinkedIn session — a browser opens, you sign in, the cookie is saved
 where the service reads it. Once every few months, nothing to copy or paste:
 
@@ -59,8 +52,8 @@ Run it:
 python -m uvicorn app.main:app --reload
 ```
 
-Open <http://127.0.0.1:8000/docs>, click **Authorize**, paste your key. The
-deployed instance is at <https://tross-h4pk.onrender.com/docs>.
+Open <http://127.0.0.1:8000/docs> and try it. The deployed instance is at
+<https://tross-h4pk.onrender.com/docs>.
 
 > **No credentials to hand?** Set `PROVIDER=public` and skip the login step
 > entirely — anonymous, no account, no expiry. Costs you skills and
@@ -102,10 +95,13 @@ All endpoints under `/api/v1`. Interactive docs at `/docs`, schema at
 
 ### Authentication
 
-`X-API-Key: <one of your API_KEYS>` on `/profile`. `/health` is open so platform
-health checks can reach it.
+**None by default.** `API_KEYS` ships empty, so every endpoint is open — which
+is why the examples here run as-is.
 
-> Empty `API_KEYS` runs the API **unauthenticated** and warns at startup.
+To require a key, set `API_KEYS` (comma-separated for several); callers then
+send `X-API-Key: <key>`, and requests without one get `401 missing_api_key`.
+The service logs a warning at startup while it is open. Rate limiting applies
+either way — keyed by IP when there is no key.
 
 ### `GET /profile` · `POST /profile`
 
@@ -121,38 +117,44 @@ rejected with a `400` that says so.
 
 ```bash
 curl -X POST "https://tross-h4pk.onrender.com/api/v1/profile" \
-  -H "X-API-Key: $API_KEY" -H "Content-Type: application/json" \
-  -d '{"url": "https://www.linkedin.com/in/williamhgates/"}'
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://www.linkedin.com/in/priyanshu-saxena07/"}'
 ```
 
 The POST form needs no query encoding, which makes it the easier one to script.
 
-**Response** — full example in [`docs/sample-response.json`](docs/sample-response.json):
+**Response** — abridged. The full, unedited production response is committed
+at [`docs/sample-response.json`](docs/sample-response.json):
 
 ```jsonc
 {
   "success": true,
   "data": {
-    "public_id": "ada-lovelace",
-    "full_name": "Ada Lovelace",
-    "headline": "Principal Engineer at Acme Corp",
-    "location": "Bengaluru, Karnataka, India",
-    "about": "Mathematician and engineer...",
-    "current_company": "Acme Corp",
-    "images": { "profile_picture_url": "...", "background_image_url": "..." },
-    "experience": [{
-      "title": "Principal Engineer", "company": "Acme Corp",
-      "company_url": "https://www.linkedin.com/company/acme/",
-      "employment_type": "Full-time", "location": "Bengaluru, Karnataka, India",
-      "start_date": "Jan 2022", "end_date": "Present", "is_current": true,
-      "description": "Led the platform team..."
+    "public_id": "priyanshu-saxena07",
+    "full_name": "Priyanshu Saxena",
+    "headline": "Full Stack Developer | Software Trainee @ Meril | MERN Sta...",
+    "location": "India",
+    "about": "I’m a backend developer in the making, currently wor...",
+    "current_company": "Meril",
+    "images": { "profile_picture_url": "https://media.licdn.com/...", 
+                "background_image_url": "https://media.licdn.com/..." },
+    "experience": [{                      // 8 entries
+      "title": "Frontend Intern", "company": "Safe Your Web",
+      "company_url": "https://www.linkedin.com/company/safeyourwebofficial/",
+      "location": null,
+      "start_date": "Oct 2024", "end_date": "Jan 2025",
+      "is_current": false, "description": "..."
     }],
-    "education":      [{ "school": "...", "degree": "...", "field_of_study": "..." }],
-    "skills":         [{ "name": "Python", "endorsement_count": 42 }],
-    "certifications": [{ "name": "...", "issuer": "...", "credential_url": "..." }],
-    "languages":      [{ "name": "English", "proficiency": "Native or bilingual" }],
+    "education": [{                       // 2 entries
+      "school": "Parul University",
+      "degree": "Bachelor of Technology - BTech",
+      "field_of_study": "Artificial Intelligence"
+    }],
+    "skills":         [{ "name": "Nodebb" }],          // 27 entries
+    "certifications": [{ "name": "Speaking Confidently and Effective" }],   // 4 entries
+    "languages":      [],
     "source": "voyager",
-    "scraped_at": "2026-08-29T09:14:02.118Z"
+    "scraped_at": "2026-08-29T08:57:47.004153Z"
   },
   "meta": { "provider": "voyager", "cached": false, "duration_ms": 1204 }
 }
@@ -187,7 +189,6 @@ don't flap during credential rotation.
 | Status | Code | Cause |
 |---|---|---|
 | 400 | `invalid_profile_url` | Not a member profile URL |
-| 401 / 403 | `missing_api_key` / `invalid_api_key` | API key |
 | 403 | `profile_not_accessible` | Exists, not visible to this session |
 | 404 | `profile_not_found` | No such profile |
 | 429 | `rate_limited` | Per-key limit; see `Retry-After` |
@@ -229,7 +230,7 @@ each response says which answered.
 
 | Variable | Default | Notes |
 |---|---|---|
-| `API_KEYS` | *(empty)* | Comma-separated. Empty ⇒ no auth |
+| `API_KEYS` | *(empty)* | Empty ⇒ **open API**. Set to require `X-API-Key` |
 | `PROVIDER` | `voyager` | See table above |
 | `LINKEDIN_LI_AT` | — | Session cookie for remote deploys; local uses the cookie store |
 | `COOKIE_STORE_PATH` | `.session/cookies.json` | Where `scripts/login.py` writes. Live credential |
@@ -251,19 +252,20 @@ change is usually a JSON edit rather than a release —
 ## Deployment
 
 [`render.yaml`](render.yaml) is a Render blueprint: push to GitHub → **New →
-Blueprint** → deploy. Render generates `API_KEYS`, prompts for secrets marked
-`sync: false`, terminates TLS, and health-checks `/api/v1/health`. A 1 GB disk at
-`/data` persists the session across redeploys.
+Blueprint** → deploy. Render prompts for the secrets marked `sync: false`,
+terminates TLS, and health-checks `/api/v1/health`.
 
 Set `LINKEDIN_LI_AT` in the dashboard (printed by `scripts/login.py`), or use
-`PROVIDER=public` and set nothing. Free tier is fine — the image is
-`python:3.12-slim` and no provider except `linkedin_scraper` launches a browser.
+`PROVIDER=public` and set nothing at all. The image is `python:3.12-slim` and no
+provider except `linkedin_scraper` launches a browser, so the free tier is
+enough.
 
-Two free-tier notes. There is **no persistent disk** (Render's free plan has
-none), so the session is read from `LINKEDIN_LI_AT` on every boot rather than
-recovered from cache. And free instances **sleep after inactivity**: the first
-request after idle can take ~30s, or briefly return Render's own 404 while the
-container starts. `/api/v1/health` is the thing to poll until it answers.
+Two free-tier caveats. There is **no persistent disk** — Render's free plan has
+none — so the session is read from `LINKEDIN_LI_AT` on every boot rather than
+recovered from cache. And instances **spin down when idle**: a request to a
+sleeping service returns Render's own plain-text `404` with
+`x-render-routing: no-server`, which is not your app answering. Poll
+`/api/v1/health` until it returns JSON.
 
 Any Docker host works: same env vars, bind `$PORT`. One worker by design — the
 session is process-local state.

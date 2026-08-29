@@ -239,3 +239,54 @@ def test_root_redirects_to_docs(client):
     response = client.get("/", follow_redirects=False)
     assert response.status_code in (307, 302)
     assert response.headers["location"] == "/docs"
+
+
+# --- open mode --------------------------------------------------------------
+
+
+@pytest.fixture
+def open_client(env, provider, monkeypatch):
+    """The shipped default: API_KEYS empty, so no key is required.
+
+    Depends on `env` for the low test rate limit, then blanks the key it set.
+    """
+    from app import main
+    from app.config import get_settings
+
+    monkeypatch.setenv("API_KEYS", "")
+    monkeypatch.setenv("LINKEDIN_LI_AT", "")
+    get_settings.cache_clear()
+    monkeypatch.setattr(main, "build_provider", lambda settings: provider)
+
+    with TestClient(main.create_app(), raise_server_exceptions=False) as client:
+        yield client
+
+    get_settings.cache_clear()
+
+
+def test_empty_api_keys_leaves_the_api_open(open_client):
+    response = open_client.get("/api/v1/profile", params={"url": PROFILE_URL})
+    assert response.status_code == 200
+    assert response.json()["data"]["full_name"] == "Ada Lovelace"
+
+
+def test_a_stray_key_is_ignored_rather_than_rejected_when_open(open_client):
+    """Callers migrating from a keyed deployment must not start failing."""
+    response = open_client.get(
+        "/api/v1/profile", params={"url": PROFILE_URL}, headers={"X-API-Key": "anything"}
+    )
+    assert response.status_code == 200
+
+
+def test_rate_limiting_still_applies_without_a_key(open_client):
+    """With no key to identify callers, the limiter falls back to client IP."""
+    for index in range(5):
+        assert open_client.get(
+            "/api/v1/profile",
+            params={"url": f"https://www.linkedin.com/in/person-{index}/"},
+        ).status_code == 200
+
+    overflow = open_client.get(
+        "/api/v1/profile", params={"url": "https://www.linkedin.com/in/person-x/"}
+    )
+    assert overflow.status_code == 429
