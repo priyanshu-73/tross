@@ -1,8 +1,15 @@
-# Playwright's own image: Chromium plus the ~60 shared libraries it needs are
-# already installed and version-matched to the `playwright` pip package. Building
-# this from python:slim means apt-installing all of them by hand, and any drift
-# between the browser build and the client library shows up as flaky launches.
-FROM mcr.microsoft.com/playwright/python:v1.49.1-noble
+# Slim by design: the default provider (`voyager`) and the credential-free
+# `public` provider talk to LinkedIn over plain HTTP and never launch a browser,
+# so shipping Chromium would add ~1.4 GB to the image for nothing.
+#
+# Only `PROVIDER=linkedin_scraper` needs a browser. To build for that, swap the
+# base image for Playwright's — it has Chromium and its ~60 shared libraries
+# already installed and version-matched to the pip package:
+#
+#     FROM mcr.microsoft.com/playwright/python:v1.49.1-noble
+#
+# `scripts/login.py` also needs a browser, but it runs on your machine, not here.
+FROM python:3.12-slim
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -11,21 +18,18 @@ ENV PYTHONUNBUFFERED=1 \
 
 WORKDIR /app
 
-# Dependencies first so code edits do not invalidate the pip layer.
+# Dependencies first, so code edits do not invalidate the pip layer.
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY config.json ./
 COPY app ./app
 
-# Default session location for local/docker runs. On Render this is overridden
-# by SESSION_STATE_PATH=/data/storage_state.json, backed by a persistent disk.
+# Where a session is cached when no writable volume is mounted.
 RUN mkdir -p /app/.session
 
 EXPOSE 8000
 
-# Runs as root: Render mounts persistent disks root-owned, and dropping
-# privileges here would leave the container unable to write the session cookie.
-# One worker on purpose - the browser context and its LinkedIn session are
-# process-local state, so replicas would each need their own login.
+# One worker on purpose: the LinkedIn session is process-local state, so
+# replicas would each need their own.
 CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT} --workers 1"]

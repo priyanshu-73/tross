@@ -1,30 +1,38 @@
 # Render Blueprint - https://render.com/docs/blueprint-spec
 #
-# Deploy:  push this repo to GitHub, then Render Dashboard > New > Blueprint.
-# Secrets are declared with `sync: false`, which means Render prompts for them
-# at deploy time and stores them in its own encrypted env store - they are never
+# Deploy: push to GitHub, then Render Dashboard > New > Blueprint.
+#
+# Secrets are declared `sync: false`, which means Render prompts for them at
+# deploy time and keeps them in its own encrypted store - they are never
 # committed here.
+#
+# No persistent disk: Render's free plan does not support one, and this service
+# does not need it. The session comes from LINKEDIN_LI_AT on every boot, so a
+# restart re-reads it rather than recovering a cached copy. On a paid plan you
+# may add a disk and point COOKIE_STORE_PATH at it.
 services:
   - type: web
     name: linkedin-profile-api
     runtime: docker
     dockerfilePath: ./Dockerfile
-    plan: free             # ample for 'public'/'embedded'; use starter for the scraper
+    plan: free
     region: oregon
     healthCheckPath: /api/v1/health
     autoDeploy: true
     envVars:
-      # Generated once by Render; read it from the dashboard and send it as X-API-Key.
+      # Generated once by Render. Read it from the dashboard; callers send it
+      # as the X-API-Key header.
       - key: API_KEYS
         generateValue: true
 
-      # --- prompted at deploy time, never stored in git ---
+      # --- prompted at deploy time, never stored in git -----------------------
+      # Required for PROVIDER=voyager. Obtain it locally with
+      # `python scripts/login.py`, which prints the value to paste here.
+      # Leave blank if deploying with PROVIDER=public.
       - key: LINKEDIN_LI_AT
         sync: false
-      - key: LINKEDIN_EMAIL
-        sync: false
-      - key: LINKEDIN_PASSWORD
-        sync: false
+      # A residential proxy materially improves reliability from a datacentre
+      # IP, which is what Render gives you. Optional.
       - key: PROXY_SERVER
         sync: false
       - key: PROXY_USERNAME
@@ -32,17 +40,16 @@ services:
       - key: PROXY_PASSWORD
         sync: false
 
-      # --- non-secret runtime configuration ---
+      # --- non-secret runtime configuration ----------------------------------
+      # 'voyager' returns all ten fields but needs LINKEDIN_LI_AT.
+      # 'public'  needs no credentials at all, but omits skills/certifications.
+      - key: PROVIDER
+        value: voyager
+
       - key: ENVIRONMENT
         value: production
       - key: LOG_LEVEL
         value: INFO
-      # 'voyager' calls LinkedIn's own Dash API and returns every field, but
-      # needs a session (LINKEDIN_LI_AT). 'public' needs no credentials at all.
-      - key: PROVIDER
-        value: voyager
-      - key: HEADLESS
-        value: "true"
       - key: MAX_CONCURRENT_SCRAPES
         value: "1"
       - key: SCRAPE_MIN_INTERVAL_SECONDS
@@ -53,15 +60,8 @@ services:
         value: "30"
       - key: RATE_LIMIT_WINDOW_SECONDS
         value: "60"
-      - key: SESSION_STATE_PATH
-        value: /data/storage_state.json
+      # Ephemeral on the free plan - the container filesystem resets on deploy.
       - key: COOKIE_STORE_PATH
-        value: /data/cookies.json
-
-    # Keeps the LinkedIn session cookie across restarts, so the service does not
-    # have to log in again on every deploy (each login is a fresh chance to trip
-    # a checkpoint).
-    disk:
-      name: session
-      mountPath: /data
-      sizeGB: 1
+        value: /tmp/cookies.json
+      - key: SESSION_STATE_PATH
+        value: /tmp/storage_state.json

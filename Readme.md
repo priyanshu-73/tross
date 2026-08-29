@@ -2,12 +2,17 @@
 
 Give it a LinkedIn profile URL, get back structured JSON.
 
-**Live:** `https://<your-service>.onrender.com` · **Docs:** `/docs` · **Health:** `/api/v1/health`
+**Live:** <https://tross-h4pk.onrender.com> · [**Interactive docs**](https://tross-h4pk.onrender.com/docs) · [**Health**](https://tross-h4pk.onrender.com/api/v1/health)
 
 ```bash
 curl -H "X-API-Key: $API_KEY" \
-  "https://<your-service>.onrender.com/api/v1/profile?url=https://www.linkedin.com/in/williamhgates/"
+  --get "https://tross-h4pk.onrender.com/api/v1/profile" \
+  --data-urlencode "url=https://www.linkedin.com/in/williamhgates/"
 ```
+
+`--data-urlencode` matters: a raw `https://` inside a query string trips some
+proxies. Any client that encodes query parameters — `requests`, `axios`, `fetch`
+with `URLSearchParams` — does this for you.
 
 Reads LinkedIn's own Dash API — four GETs, no browser, ~1s. Every field the
 brief asks for:
@@ -54,7 +59,8 @@ Run it:
 python -m uvicorn app.main:app --reload
 ```
 
-Open <http://127.0.0.1:8000/docs>, click **Authorize**, paste your key.
+Open <http://127.0.0.1:8000/docs>, click **Authorize**, paste your key. The
+deployed instance is at <https://tross-h4pk.onrender.com/docs>.
 
 > **No credentials to hand?** Set `PROVIDER=public` and skip the login step
 > entirely — anonymous, no account, no expiry. Costs you skills and
@@ -114,10 +120,12 @@ and a bare `x` all resolve to the same profile. Company and school URLs are
 rejected with a `400` that says so.
 
 ```bash
-curl -X POST "$BASE/api/v1/profile" -H "X-API-Key: $API_KEY" \
-  -H "Content-Type: application/json" \
+curl -X POST "https://tross-h4pk.onrender.com/api/v1/profile" \
+  -H "X-API-Key: $API_KEY" -H "Content-Type: application/json" \
   -d '{"url": "https://www.linkedin.com/in/williamhgates/"}'
 ```
+
+The POST form needs no query encoding, which makes it the easier one to script.
 
 **Response** — full example in [`docs/sample-response.json`](docs/sample-response.json):
 
@@ -248,8 +256,14 @@ Blueprint** → deploy. Render generates `API_KEYS`, prompts for secrets marked
 `/data` persists the session across redeploys.
 
 Set `LINKEDIN_LI_AT` in the dashboard (printed by `scripts/login.py`), or use
-`PROVIDER=public` and set nothing. Free tier is fine — no Chromium at runtime.
-Only `linkedin_scraper` needs `starter` or better.
+`PROVIDER=public` and set nothing. Free tier is fine — the image is
+`python:3.12-slim` and no provider except `linkedin_scraper` launches a browser.
+
+Two free-tier notes. There is **no persistent disk** (Render's free plan has
+none), so the session is read from `LINKEDIN_LI_AT` on every boot rather than
+recovered from cache. And free instances **sleep after inactivity**: the first
+request after idle can take ~30s, or briefly return Render's own 404 while the
+container starts. `/api/v1/health` is the thing to poll until it answers.
 
 Any Docker host works: same env vars, bind `$PORT`. One worker by design — the
 session is process-local state.
