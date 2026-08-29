@@ -1,0 +1,131 @@
+{
+  "_comment": "Mirrors a real Dash FullProfileWithEntities response: a flat included[] of typed entities. Includes a PositionGroup (whose $type ends with a superstring of Position) and a second Profile for the viewer, both of which must not be mis-selected.",
+  "data": {
+    "entityUrn": "urn:li:fsd_profile:ADA",
+    "*elements": ["urn:li:fsd_profile:ADA"],
+    "$type": "com.linkedin.restli.common.CollectionResponse"
+  },
+  "included": [
+    {
+      "$type": "com.linkedin.voyager.dash.identity.profile.Profile",
+      "entityUrn": "urn:li:fsd_profile:ADA",
+      "publicIdentifier": "ada-lovelace-1a2b3c",
+      "firstName": "Ada",
+      "lastName": "Lovelace",
+      "headline": "Principal Engineer at Acme Corp | Distributed systems",
+      "summary": "Mathematician and engineer. I build data platforms.",
+      "location": { "countryCode": "IN" },
+      "profilePicture": {
+        "displayImageWithFrameReferenceUnion": {
+          "vectorImage": {
+            "rootUrl": "https://media.licdn.com/dms/image/v2/profile/",
+            "artifacts": [
+              { "width": 100, "fileIdentifyingUrlPathSegment": "100_100/photo.jpg" },
+              { "width": 800, "fileIdentifyingUrlPathSegment": "800_800/photo.jpg" }
+            ]
+          }
+        }
+      },
+      "backgroundPicture": {
+        "originalImageReference": {
+          "vectorImage": {
+            "rootUrl": "https://media.licdn.com/dms/image/v2/background/",
+            "artifacts": [
+              { "width": 1400, "fileIdentifyingUrlPathSegment": "1400_350/cover.jpg" }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "$type": "com.linkedin.voyager.dash.identity.profile.Profile",
+      "entityUrn": "urn:li:fsd_profile:VIEWER",
+      "publicIdentifier": "someone-else",
+      "firstName": "Viewer",
+      "lastName": "Person",
+      "headline": "The signed-in user, not the requested profile"
+    },
+    {
+      "$type": "com.linkedin.voyager.dash.common.Geo",
+      "entityUrn": "urn:li:fsd_geo:1",
+      "defaultLocalizedName": "Bengaluru, Karnataka, India"
+    },
+    {
+      "$type": "com.linkedin.voyager.dash.organization.Company",
+      "entityUrn": "urn:li:fsd_company:1",
+      "name": "Acme Corp",
+      "universalName": "acme",
+      "url": "https://www.linkedin.com/company/acme/"
+    },
+    {
+      "$type": "com.linkedin.voyager.dash.organization.School",
+      "entityUrn": "urn:li:fsd_school:1",
+      "name": "University of Cambridge",
+      "url": "https://www.linkedin.com/school/cambridge/"
+    },
+    {
+      "$type": "com.linkedin.voyager.dash.identity.profile.PositionGroup",
+      "entityUrn": "urn:li:fsd_profilePositionGroup:1",
+      "companyName": "Acme Corp",
+      "dateRange": { "start": { "month": 6, "year": 2020 } }
+    },
+    {
+      "$type": "com.linkedin.voyager.dash.identity.profile.Position",
+      "entityUrn": "urn:li:fsd_profilePosition:1",
+      "title": "Principal Engineer",
+      "companyName": "Acme Corp",
+      "companyUrn": "urn:li:fsd_company:1",
+      "locationName": "Bengaluru, Karnataka, India",
+      "description": "Led the platform team through a migration.",
+      "employmentTypeName": "Full-time",
+      "dateRange": { "start": { "month": 1, "year": 2022 } }
+    },
+    {
+      "$type": "com.linkedin.voyager.dash.identity.profile.Position",
+      "entityUrn": "urn:li:fsd_profilePosition:2",
+      "title": "Software Engineer",
+      "companyName": "Globex",
+      "dateRange": {
+        "start": { "month": 3, "year": 2019 },
+        "end": { "month": 5, "year": 2020 }
+      }
+    },
+    {
+      "$type": "com.linkedin.voyager.dash.identity.profile.Education",
+      "entityUrn": "urn:li:fsd_profileEducation:1",
+      "schoolName": "University of Cambridge",
+      "schoolUrn": "urn:li:fsd_school:1",
+      "degreeName": "Bachelor of Science - BS",
+      "fieldOfStudy": "Mathematics",
+      "dateRange": { "start": { "year": 2014 }, "end": { "year": 2018 } }
+    },
+    {
+      "$type": "com.linkedin.voyager.dash.identity.profile.Skill",
+      "entityUrn": "urn:li:fsd_profileSkill:1",
+      "name": "Python"
+    },
+    {
+      "$type": "com.linkedin.voyager.dash.identity.profile.Skill",
+      "entityUrn": "urn:li:fsd_profileSkill:2",
+      "name": "Distributed Systems"
+    },
+    {
+      "$type": "com.linkedin.voyager.dash.identity.profile.Certification",
+      "entityUrn": "urn:li:fsd_profileCertification:1",
+      "name": "AWS Certified Solutions Architect",
+      "authority": "Amazon Web Services (AWS)",
+      "licenseNumber": "AWS-SAA-99120",
+      "url": "https://aws.amazon.com/verification/AWS-SAA-99120",
+      "dateRange": {
+        "start": { "month": 3, "year": 2021 },
+        "end": { "month": 3, "year": 2024 }
+      }
+    },
+    {
+      "$type": "com.linkedin.voyager.dash.identity.profile.Language",
+      "entityUrn": "urn:li:fsd_profileLanguage:1",
+      "name": "English",
+      "proficiency": "NATIVE_OR_BILINGUAL"
+    }
+  ]
+}

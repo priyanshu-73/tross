@@ -1,0 +1,219 @@
+<!--
+  Synthetic fixture reproducing the *structure* of a logged-in LinkedIn profile
+  page: anchor-id sections, aria-hidden/visually-hidden text pairs, grouped roles
+  under one company, and sub-components. Trimmed of LinkedIn's obfuscated class
+  soup, which the parser deliberately does not depend on.
+-->
+<html>
+<body>
+<main>
+
+  <!-- ================= top card ================= -->
+  <section class="artdeco-card ph0 pv0">
+    <div class="ph5 pb5">
+      <div class="mt2 relative">
+        <h1 class="text-heading-xlarge inline t-24 v-align-middle break-words">Ada Lovelace</h1>
+        <div class="text-body-medium break-words">Principal Engineer at Acme Corp | Distributed systems</div>
+        <span class="text-body-small inline t-black--light break-words">Bengaluru, Karnataka, India</span>
+        <ul class="pv-top-card--list-bullet">
+          <li><span>12,431 followers</span></li>
+          <li><span>500+ connections</span></li>
+        </ul>
+      </div>
+      <img class="pv-top-card-profile-picture__image--show"
+           src="https://media.licdn.com/dms/image/v2/profile-photo.jpg"
+           alt="Ada Lovelace">
+      <img class="profile-background-image__image"
+           src="https://media.licdn.com/dms/image/v2/cover-photo.jpg"
+           alt="Background image">
+    </div>
+  </section>
+
+  <!-- ================= about ================= -->
+  <section class="artdeco-card">
+    <div id="about" class="pv-profile-card__anchor"></div>
+    <div class="pvs-header__container">
+      <h2><span aria-hidden="true">About</span><span class="visually-hidden">About</span></h2>
+    </div>
+    <div class="display-flex ph5 pv3">
+      <div class="inline-show-more-text">
+        <span aria-hidden="true">Mathematician and engineer. I build data platforms and mentor the people who run them.</span>
+        <span class="visually-hidden">Mathematician and engineer. I build data platforms and mentor the people who run them.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= experience ================= -->
+  <section class="artdeco-card">
+    <div id="experience" class="pv-profile-card__anchor"></div>
+    <div class="pvs-header__container">
+      <h2><span aria-hidden="true">Experience</span></h2>
+    </div>
+    <div class="pvs-list__container">
+      <ul>
+
+        <!-- grouped: two roles under one company -->
+        <li class="artdeco-list__item pvs-list__paged-list-item">
+          <div class="display-flex flex-column full-width">
+            <a class="optional-action-target-wrapper" href="/company/acme/?trk=public_profile">
+              <div class="mr1 hoverable-link-text t-bold">
+                <span aria-hidden="true">Acme Corp</span><span class="visually-hidden">Acme Corp</span>
+              </div>
+              <span class="t-14 t-normal">
+                <span aria-hidden="true">Full-time &middot; 4 yrs 2 mos</span>
+              </span>
+              <span class="t-14 t-normal t-black--light">
+                <span aria-hidden="true">Bengaluru, Karnataka, India</span>
+              </span>
+            </a>
+            <div class="pvs-entity__sub-components">
+              <ul>
+                <li>
+                  <div class="mr1 t-bold">
+                    <span aria-hidden="true">Principal Engineer</span><span class="visually-hidden">Principal Engineer</span>
+                  </div>
+                  <span class="t-14 t-normal t-black--light">
+                    <span aria-hidden="true">Jan 2022 - Present &middot; 2 yrs 6 mos</span>
+                  </span>
+                  <span class="t-14 t-normal t-black--light">
+                    <span aria-hidden="true">Bengaluru, Karnataka, India</span>
+                  </span>
+                  <div class="pvs-entity__sub-components">
+                    <div class="inline-show-more-text">
+                      <span aria-hidden="true">Led the platform team through a migration to event-driven ingestion.</span>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="mr1 t-bold">
+                    <span aria-hidden="true">Senior Software Engineer</span>
+                  </div>
+                  <span class="t-14 t-normal t-black--light">
+                    <span aria-hidden="true">Jun 2020 - Dec 2021 &middot; 1 yr 7 mos</span>
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+
+        <!-- single role -->
+        <li class="artdeco-list__item pvs-list__paged-list-item">
+          <div class="display-flex flex-column full-width">
+            <a class="optional-action-target-wrapper" href="/company/globex/">
+              <div class="mr1 hoverable-link-text t-bold">
+                <span aria-hidden="true">Software Engineer</span>
+              </div>
+              <span class="t-14 t-normal">
+                <span aria-hidden="true">Globex &middot; Internship</span>
+              </span>
+              <span class="t-14 t-normal t-black--light">
+                <span aria-hidden="true">Mar 2019 - May 2020 &middot; 1 yr 3 mos</span>
+              </span>
+              <span class="t-14 t-normal t-black--light">
+                <span aria-hidden="true">Remote</span>
+              </span>
+            </a>
+          </div>
+        </li>
+
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= education ================= -->
+  <section class="artdeco-card">
+    <div id="education" class="pv-profile-card__anchor"></div>
+    <div class="pvs-list__container">
+      <ul>
+        <li class="artdeco-list__item">
+          <a href="/school/university-of-cambridge/">
+            <div class="mr1 hoverable-link-text t-bold">
+              <span aria-hidden="true">University of Cambridge</span>
+            </div>
+            <span class="t-14 t-normal">
+              <span aria-hidden="true">Bachelor of Science - BS, Mathematics</span>
+            </span>
+            <span class="t-14 t-normal t-black--light">
+              <span aria-hidden="true">2014 - 2018</span>
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= skills ================= -->
+  <section class="artdeco-card">
+    <div id="skills" class="pv-profile-card__anchor"></div>
+    <div class="pvs-list__container">
+      <ul>
+        <li class="artdeco-list__item">
+          <div class="mr1 hoverable-link-text t-bold">
+            <span aria-hidden="true">Python</span>
+          </div>
+          <div class="pvs-entity__sub-components">
+            <span aria-hidden="true">42 endorsements</span>
+          </div>
+        </li>
+        <li class="artdeco-list__item">
+          <div class="mr1 hoverable-link-text t-bold">
+            <span aria-hidden="true">Distributed Systems</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= certifications ================= -->
+  <section class="artdeco-card">
+    <div id="licenses_and_certifications" class="pv-profile-card__anchor"></div>
+    <div class="pvs-list__container">
+      <ul>
+        <li class="artdeco-list__item">
+          <div class="mr1 hoverable-link-text t-bold">
+            <span aria-hidden="true">AWS Certified Solutions Architect</span>
+          </div>
+          <span class="t-14 t-normal">
+            <span aria-hidden="true">Amazon Web Services (AWS)</span>
+          </span>
+          <span class="t-14 t-normal t-black--light">
+            <span aria-hidden="true">Issued Mar 2021 &middot; Expires Mar 2024</span>
+          </span>
+          <div class="pvs-entity__sub-components">
+            <span aria-hidden="true">Credential ID AWS-SAA-99120</span>
+          </div>
+          <a href="https://aws.amazon.com/verification/AWS-SAA-99120">Show credential</a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= languages ================= -->
+  <section class="artdeco-card">
+    <div id="languages" class="pv-profile-card__anchor"></div>
+    <div class="pvs-list__container">
+      <ul>
+        <li class="artdeco-list__item">
+          <div class="mr1 hoverable-link-text t-bold">
+            <span aria-hidden="true">English</span>
+          </div>
+          <span class="t-14 t-normal t-black--light">
+            <span aria-hidden="true">Native or bilingual proficiency</span>
+          </span>
+        </li>
+        <li class="artdeco-list__item">
+          <div class="mr1 hoverable-link-text t-bold">
+            <span aria-hidden="true">Hindi</span>
+          </div>
+          <span class="t-14 t-normal t-black--light">
+            <span aria-hidden="true">Professional working proficiency</span>
+          </span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+</body>
+</html>

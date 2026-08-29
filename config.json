@@ -1,0 +1,170 @@
+{
+  "linkedin": {
+    "base_url": "https://www.linkedin.com",
+    "feed_path": "/feed/",
+    "login_path": "/login",
+    "profile_path_template": "/in/{public_id}/",
+    "details_path_template": "/in/{public_id}/details/{section}/",
+    "detail_sections": [
+      "experience",
+      "education",
+      "skills",
+      "certifications",
+      "languages"
+    ]
+  },
+  "browser": {
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "locale": "en-US",
+    "timezone_id": "UTC",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "launch_args": [
+      "--no-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-gpu",
+      "--disable-blink-features=AutomationControlled"
+    ],
+    "blocked_resource_types": [
+      "image",
+      "media",
+      "font"
+    ],
+    "hydration_selector": "main h1",
+    "hydration_timeout_ms": 15000,
+    "scroll_steps": 10,
+    "scroll_delta_px": 2000,
+    "scroll_pause_ms": 300
+  },
+  "login_selectors": {
+    "username": "#username",
+    "password": "#password",
+    "submit": "button[type=\"submit\"]",
+    "error": "#error-for-password, #error-for-username, .alert-content"
+  },
+  "detection": {
+    "authwall_url_markers": [
+      "/login",
+      "/uas/login",
+      "/authwall",
+      "/signup",
+      "/checkpoint"
+    ],
+    "challenge_url_markers": [
+      "/checkpoint/challenge",
+      "/checkpoint/lg/login-submit",
+      "add-phone"
+    ],
+    "not_found_body_markers": [
+      "page not found",
+      "this page doesn't exist",
+      "profile not found",
+      "check your url"
+    ]
+  },
+  "proxycurl": {
+    "base_url": "https://nubela.co/proxycurl/api/v2/linkedin",
+    "timeout_seconds": 60
+  },
+  "voyager": {
+    "base_url": "https://www.linkedin.com/voyager/api",
+    "bootstrap_url": "https://www.linkedin.com/feed/",
+    "_comment": "Dash REST endpoints, as used by linkedin.com itself. The older identity/profiles/{id}/profileView endpoint was retired (HTTP 410).",
+    "profile_path": "/identity/dash/profiles",
+    "profile_decoration_id": "com.linkedin.voyager.dash.deco.identity.profile.FullProfileWithEntities-63",
+    "skills_path": "/identity/dash/profileSkills",
+    "certifications_path": "/identity/dash/profileCertifications",
+    "languages_path": "/identity/dash/profileLanguages",
+    "page_size": 100,
+    "timeout_seconds": 30,
+    "headers": {
+      "accept": "application/vnd.linkedin.normalized+json+2.1",
+      "x-restli-protocol-version": "2.0.0",
+      "x-li-lang": "en_US",
+      "accept-language": "en-US,en;q=0.9"
+    },
+    "entity_types": {
+      "profile": "identity.profile.Profile",
+      "position": "identity.profile.Position",
+      "education": "identity.profile.Education",
+      "skill": "identity.profile.Skill",
+      "certification": "identity.profile.Certification",
+      "language": "identity.profile.Language",
+      "company": "organization.Company",
+      "school": "organization.School",
+      "geo": "common.Geo"
+    }
+  },
+  "vocabulary": {
+    "month_names": [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ],
+    "language_proficiency": {
+      "NATIVE_OR_BILINGUAL": "Native or bilingual proficiency",
+      "FULL_PROFESSIONAL": "Full professional proficiency",
+      "PROFESSIONAL_WORKING": "Professional working proficiency",
+      "LIMITED_WORKING": "Limited working proficiency",
+      "ELEMENTARY": "Elementary proficiency"
+    }
+  },
+  "embedded": {
+    "profile_url_template": "https://www.linkedin.com/in/{public_id}/",
+    "timeout_seconds": 30,
+    "headers": {
+      "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      "accept-language": "en-US,en;q=0.9",
+      "cache-control": "no-cache"
+    },
+    "_comment_entity_types": "Substring matched against each included[] entity's $type.",
+    "entity_types": {
+      "profile": "identity.profile.Profile",
+      "position": "identity.profile.Position",
+      "education": "identity.profile.Education",
+      "skill": "identity.profile.Skill",
+      "certification": "identity.profile.Certification",
+      "language": "identity.profile.Language"
+    },
+    "authwall_markers": [
+      "authwall",
+      "join now to view",
+      "sign in to view",
+      "/uas/login"
+    ]
+  },
+  "auth": {
+    "login_page_url": "https://www.linkedin.com/uas/login",
+    "login_submit_url": "https://www.linkedin.com/uas/login-submit",
+    "csrf_field": "loginCsrfParam",
+    "session_key_field": "session_key",
+    "session_password_field": "session_password",
+    "session_cookie": "li_at",
+    "extra_form_fields": {
+      "isJsEnabled": "false",
+      "trk": "guest_homepage-basic_sign-in-submit"
+    },
+    "challenge_url_markers": [
+      "/checkpoint/challenge",
+      "/checkpoint/rp",
+      "/uas/consumer-email-challenge",
+      "add-phone"
+    ],
+    "bad_credential_markers": [
+      "wrong email or password",
+      "couldn't find a linkedin account",
+      "please enter a valid email"
+    ]
+  }
+}

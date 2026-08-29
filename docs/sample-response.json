@@ -1,0 +1,108 @@
+{
+  "success": true,
+  "data": {
+    "input_url": "https://www.linkedin.com/in/ada-lovelace-1a2b3c/",
+    "profile_url": "https://www.linkedin.com/in/ada-lovelace-1a2b3c/",
+    "public_id": "ada-lovelace-1a2b3c",
+    "full_name": "Ada Lovelace",
+    "first_name": "Ada",
+    "last_name": "Lovelace",
+    "headline": "Principal Engineer at Acme Corp | Distributed systems",
+    "location": "Bengaluru, Karnataka, India",
+    "about": "Mathematician and engineer. I build data platforms and mentor the people who run them.",
+    "current_company": "Acme Corp",
+    "connections": "500+",
+    "followers": "12,431",
+    "images": {
+      "profile_picture_url": "https://media.licdn.com/dms/image/v2/profile-photo.jpg",
+      "background_image_url": "https://media.licdn.com/dms/image/v2/cover-photo.jpg"
+    },
+    "experience": [
+      {
+        "title": "Principal Engineer",
+        "company": "Acme Corp",
+        "company_url": "https://www.linkedin.com/company/acme/",
+        "employment_type": "Full-time",
+        "location": "Bengaluru, Karnataka, India",
+        "start_date": "Jan 2022",
+        "end_date": "Present",
+        "duration": "2 yrs 6 mos",
+        "is_current": true,
+        "description": "Led the platform team through a migration to event-driven ingestion."
+      },
+      {
+        "title": "Senior Software Engineer",
+        "company": "Acme Corp",
+        "company_url": "https://www.linkedin.com/company/acme/",
+        "employment_type": "Full-time",
+        "location": "Bengaluru, Karnataka, India",
+        "start_date": "Jun 2020",
+        "end_date": "Dec 2021",
+        "duration": "1 yr 7 mos",
+        "is_current": false,
+        "description": null
+      },
+      {
+        "title": "Software Engineer",
+        "company": "Globex",
+        "company_url": "https://www.linkedin.com/company/globex/",
+        "employment_type": "Internship",
+        "location": "Remote",
+        "start_date": "Mar 2019",
+        "end_date": "May 2020",
+        "duration": "1 yr 3 mos",
+        "is_current": false,
+        "description": null
+      }
+    ],
+    "education": [
+      {
+        "school": "University of Cambridge",
+        "school_url": "https://www.linkedin.com/school/university-of-cambridge/",
+        "degree": "Bachelor of Science - BS",
+        "field_of_study": "Mathematics",
+        "start_date": "2014",
+        "end_date": "2018",
+        "description": null
+      }
+    ],
+    "skills": [
+      {
+        "name": "Python",
+        "endorsement_count": 42
+      },
+      {
+        "name": "Distributed Systems",
+        "endorsement_count": null
+      }
+    ],
+    "certifications": [
+      {
+        "name": "AWS Certified Solutions Architect",
+        "issuer": "Amazon Web Services (AWS)",
+        "issue_date": "Mar 2021",
+        "expiration_date": "Mar 2024",
+        "credential_id": "AWS-SAA-99120",
+        "credential_url": "https://aws.amazon.com/verification/AWS-SAA-99120"
+      }
+    ],
+    "languages": [
+      {
+        "name": "English",
+        "proficiency": "Native or bilingual proficiency"
+      },
+      {
+        "name": "Hindi",
+        "proficiency": "Professional working proficiency"
+      }
+    ],
+    "source": "linkedin_scraper",
+    "scraped_at": "2026-08-27T09:14:02.118Z"
+  },
+  "meta": {
+    "provider": "linkedin_scraper",
+    "cached": false,
+    "duration_ms": 8421,
+    "request_id": "c4f024ef7968"
+  }
+}

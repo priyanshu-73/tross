@@ -1,0 +1,37 @@
+# --- Secrets: never commit ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# --- LinkedIn session artifacts (contain live auth cookies) ---
+.session/
+storage_state.json
+*_storage_state.json
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# --- Playwright / debug output ---
+playwright-report/
+test-results/
+debug/
+*.har
+screenshots/
+
+# --- Editors / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
